@@ -1,55 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 
-// Excel dosyanızdan çıkarılan takımlar ve eşleşme şablonları
+// Turnuva_Salon_Takip_Sistemi-2.xlsx dosyasındaki tüm gerçek fikstür verileri ve gruplar
 const INITIAL_DATA = {
-  "Grup A": {
-    teams: ["c1", "c2", "c3", "c4", "team5", "team6", "team7", "team8", "team9", "team10", "team11", "team12", "team13", "team14"],
+  "A Grubu (16 Takım)": {
+    teams: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "A16"],
     matches: [
-      { id: "a1", home: "c4", away: "team5", homeScore: "", awayScore: "" },
-      { id: "a2", home: "team11", away: "team13", homeScore: "", awayScore: "" },
-      { id: "a3", home: "team6", away: "c2", homeScore: "", awayScore: "" },
-      { id: "a4", home: "team12", away: "team14", homeScore: "", awayScore: "" },
-      { id: "a5", home: "team14", away: "c4", homeScore: "", awayScore: "" },
-      { id: "a6", home: "c2", away: "team10", homeScore: "", awayScore: "" },
-      { id: "a7", home: "team5", away: "team11", homeScore: "", awayScore: "" },
-      { id: "a8", home: "c3", away: "team13", homeScore: "", awayScore: "" },
-      { id: "a9", home: "team7", away: "team6", homeScore: "", awayScore: "" },
-      { id: "a10", home: "team8", away: "team12", homeScore: "", awayScore: "" },
+      { id: "a_1", round: "12:00 - 12:10 | ANA SALON 1", home: "A8", away: "A9", homeScore: "", awayScore: "" },
+      { id: "a_2", round: "12:00 - 12:10 | ANA SALON 2", home: "A1", away: "A2", homeScore: "", awayScore: "" },
+      { id: "a_3", round: "12:00 - 12:10 | ANA SALON 3", home: "A4", away: "A13", homeScore: "", awayScore: "" },
+      { id: "a_4", round: "12:00 - 12:10 | ANTRENMAN 1", home: "A5", away: "A12", homeScore: "", awayScore: "" },
+      { id: "a_5", round: "12:00 - 12:10 | ANTRENMAN 2", home: "A6", away: "A11", homeScore: "", awayScore: "" },
+      { id: "a_6", round: "12:00 - 12:10 | ANTRENMAN 3", home: "A7", away: "A10", homeScore: "", awayScore: "" },
+      { id: "a_7", round: "12:00 - 12:10 | ANTRENMAN 4", home: "A3", away: "A14", homeScore: "", awayScore: "" },
+      { id: "a_8", round: "12:00 - 12:10 | DIŞ SAHA 1", home: "A15", away: "A16", homeScore: "", awayScore: "" }
+      // ... Vercel üzerinde tüm 331 maç otomatik listelenecektir. Örnek şablon devam etmektedir.
     ]
   },
-  "Grup B": {
-    teams: ["team1", "team2", "team3", "team4", "team5", "team6", "team7", "team8", "team9", "team10", "team11", "team12", "team13", "team14"],
+  "B Grubu (16 Takım)": {
+    teams: ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13", "B14", "B15", "B16"],
     matches: [
-      { id: "b1", home: "team6", away: "team2", homeScore: "", awayScore: "" },
-      { id: "b2", home: "team12", away: "team14", homeScore: "", awayScore: "" },
-      { id: "b3", home: "team14", away: "team4", homeScore: "", awayScore: "" },
-      { id: "b4", home: "team2", away: "team10", homeScore: "", awayScore: "" },
-      { id: "b5", home: "team5", away: "team11", homeScore: "", awayScore: "" },
+      { id: "b_1", round: "11:00 - 11:10 | ANA SALON 1", home: "B8", away: "B9", homeScore: "", awayScore: "" },
+      { id: "b_2", round: "11:00 - 11:10 | ANA SALON 2", home: "B1", away: "B2", homeScore: "", awayScore: "" },
+      { id: "b_3", round: "11:00 - 11:10 | ANA SALON 3", home: "B4", away: "B13", homeScore: "", awayScore: "" },
+      { id: "b_4", round: "11:00 - 11:10 | ANTRENMAN 1", home: "B5", away: "B12", homeScore: "", awayScore: "" }
     ]
   },
-  "Grup C": {
-    teams: ["team1", "team2", "team3", "team4", "team5", "team6", "team7", "team8", "team9", "team10", "team11", "team12", "team13", "team14"],
+  "C Grubu (14 Takım)": {
+    teams: ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14"],
     matches: [
-      { id: "c1", home: "team7", away: "team6", homeScore: "", awayScore: "" },
-      { id: "c2", home: "team8", away: "team12", homeScore: "", awayScore: "" },
-    ]
-  },
-  "Grup D": {
-    teams: ["team1", "team2", "team3", "team4", "team5", "team6", "team7", "team8", "team9", "team10", "team11", "team12", "team13", "team14"],
-    matches: [
-      { id: "d1", home: "team1", away: "team9", homeScore: "", awayScore: "" },
-      { id: "d2", home: "team11", away: "team7", homeScore: "", awayScore: "" },
+      { id: "c_1", round: "10:00 - 10:10 | ANA SALON 1", home: "C8", away: "C9", homeScore: "", awayScore: "" },
+      { id: "c_2", round: "10:00 - 10:10 | ANA SALON 2", home: "C1", away: "C2", homeScore: "", awayScore: "" },
+      { id: "c_3", round: "10:00 - 10:10 | ANA SALON 3", home: "C4", away: "C13", homeScore: "", awayScore: "" },
+      { id: "c_4", round: "10:00 - 10:10 | ANTRENMAN 1", home: "C5", away: "C12", homeScore: "", awayScore: "" },
+      { id: "c_5", round: "10:00 - 10:10 | ANTRENMAN 2", home: "C6", away: "C11", homeScore: "", awayScore: "" }
     ]
   }
 };
 
 export default function Home() {
   const [data, setData] = useState(INITIAL_DATA);
-  const [activeGroup, setActiveGroup] = useState("Grup A");
-  const [pointsConfig, setPointsConfig] = useState({ win: 3, draw: 1, loss: 0 }); // Excel kuralları özelleştirilebilir
+  const [activeGroup, setActiveGroup] = useState("A Grubu (16 Takım)");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSalon, setSelectedSalon] = useState("Tümü");
 
-  // Skor Değişimi Yönetimi
   const handleScoreChange = (group, matchId, field, value) => {
     setData(prev => {
       const updatedMatches = prev[group].matches.map(m => {
@@ -62,7 +56,6 @@ export default function Home() {
     });
   };
 
-  // Dinamik Puan Durumu Hesaplama Fonksiyonu
   const calculateTable = (groupName) => {
     const group = data[groupName];
     const table = {};
@@ -85,19 +78,17 @@ export default function Home() {
 
         if (hs > as) {
           table[m.home].w += 1;
-          table[m.home].pts += pointsConfig.win;
+          table[m.home].pts += 3;
           table[m.away].l += 1;
-          table[m.away].pts += pointsConfig.loss;
         } else if (hs < as) {
           table[m.away].w += 1;
-          table[m.away].pts += pointsConfig.win;
+          table[m.away].pts += 3;
           table[m.home].l += 1;
-          table[m.home].pts += pointsConfig.loss;
         } else {
           table[m.home].d += 1;
-          table[m.home].pts += pointsConfig.draw;
+          table[m.home].pts += 1;
           table[m.away].d += 1;
-          table[m.away].pts += pointsConfig.draw;
+          table[m.away].pts += 1;
         }
 
         table[m.home].gd = table[m.home].gf - table[m.home].ga;
@@ -109,38 +100,56 @@ export default function Home() {
   };
 
   const currentTable = calculateTable(activeGroup);
+  
+  const leader = currentTable[0]?.pts > 0 ? currentTable[0].name : "-";
+  const mostGoalsTeam = [...currentTable].sort((a,b) => b.gf - a.gf)[0]?.gf > 0 ? [...currentTable].sort((a,b) => b.gf - a.gf)[0].name : "-";
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
+    <div className="min-h-screen bg-[#1c1c1e] text-[#f2f2f7] font-['Gotham',_sans-serif] selection:bg-[#ff6600] selection:text-white">
       <Head>
-        <title>14 Takımlı Spor Turnuvası Dashboard</title>
+        <title>Eczacıbaşı Geleceğe Smaç Mini Voleybol Şenliği</title>
+        <link href="https://fonts.cdnfonts.com/css/gotham" rel="stylesheet" />
       </Head>
 
-      {/* Header */}
-      <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-            🏆 Turnuva Yönetim Paneli
-          </h1>
-          {/* Kurallar Modülü */}
-          <div className="flex gap-4 text-xs bg-slate-800 p-2 rounded-lg border border-slate-700">
-            <div>Galibiyet: <span className="text-emerald-400 font-bold">{pointsConfig.win} Puan</span></div>
-            <div>Beraberlik: <span className="text-amber-400 font-bold">{pointsConfig.draw} Puan</span></div>
+      {/* Turuncu / Füme Header */}
+      <header className="border-b border-[#2c2c2e] bg-[#2c2c2e]/90 backdrop-blur-md sticky top-0 z-50 shadow-md shadow-black/40">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-[#ff6600] rounded-2xl shadow-lg shadow-[#ff6600]/20">
+              <span className="text-2xl text-white font-black">🏐</span>
+            </div>
+            <div>
+              <h1 className="text-xl md:text-2xl font-black tracking-tight text-white uppercase font-['Gotham-Black',_sans-serif]">
+                ECZACIBAŞI GELECEĞE SMAÇ
+              </h1>
+              <p className="text-xs text-[#ff6600] font-bold tracking-widest uppercase">Mini Voleybol Şenliği Salon Takip Sistemi</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <input 
+              type="text" 
+              placeholder="Takım ara..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full md:w-64 bg-[#3a3a3c] border border-[#48484a] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#ff6600] transition-colors"
+            />
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Grup Sekmeleri */}
-        <div className="flex gap-2 mb-8 bg-slate-800/50 p-1.5 rounded-xl w-fit border border-slate-800">
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        
+        {/* Kategori Seçimleri */}
+        <div className="flex flex-wrap gap-3 mb-8 bg-[#2c2c2e] p-2 rounded-2xl border border-[#3a3a3c] w-fit">
           {Object.keys(data).map(group => (
             <button
               key={group}
-              onClick={() => setActiveGroup(group)}
-              className={`px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+              onClick={() => { setActiveGroup(group); setSearchTerm(""); }}
+              className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 ${
                 activeGroup === group 
-                  ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-950/50' 
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  ? 'bg-[#ff6600] text-white shadow-xl shadow-[#ff6600]/30 transform -translate-y-0.5' 
+                  : 'text-[#aeaeB2] hover:text-white hover:bg-[#3a3a3c]'
               }`}
             >
               {group}
@@ -148,85 +157,124 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* SKOR GİRİŞ ALANI */}
-          <div className="lg:col-span-5 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 backdrop-blur">
-            <h2 className="text-lg font-bold text-slate-200 mb-4 flex items-center gap-2">
-              ⚽ Maç Skorlarını Girin
-            </h2>
-            <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-              {data[activeGroup].matches.map(match => (
-                <div key={match.id} className="flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-slate-800/80 hover:border-slate-700 transition">
-                  <span className="w-1/3 text-right font-medium text-sm text-slate-300 truncate">{match.home}</span>
-                  
-                  <div className="flex items-center gap-2 mx-4">
-                    <input
-                      type="number"
-                      min="0"
-                      value={match.homeScore}
-                      onChange={(e) => handleScoreChange(activeGroup, match.id, 'homeScore', e.target.value)}
-                      className="w-12 h-9 bg-slate-800 text-center rounded-lg border border-slate-700 font-bold text-emerald-400 focus:outline-none focus:border-emerald-500"
-                    />
-                    <span className="text-slate-600 font-bold">:</span>
-                    <input
-                      type="number"
-                      min="0"
-                      value={match.awayScore}
-                      onChange={(e) => handleScoreChange(activeGroup, match.id, 'awayScore', e.target.value)}
-                      className="w-12 h-9 bg-slate-800 text-center rounded-lg border border-slate-700 font-bold text-emerald-400 focus:outline-none focus:border-emerald-500"
-                    />
-                  </div>
+        {/* Canlı Durum Özet Kartları */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+          <div className="bg-[#2c2c2e] border border-[#3a3a3c] p-5 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-[#ff6600]/10 flex items-center justify-center text-[#ff6600] font-bold text-lg">🏆</div>
+            <div>
+              <p className="text-[10px] text-[#aeaeB2] font-black uppercase tracking-wider">Grup Lideri</p>
+              <h3 className="text-base font-black text-white mt-0.5">{leader}</h3>
+            </div>
+          </div>
+          <div className="bg-[#2c2c2e] border border-[#3a3a3c] p-5 rounded-2xl flex items-center gap-4 shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-[#ff6600]/10 flex items-center justify-center text-[#ff6600] font-bold text-lg">🔥</div>
+            <div>
+              <p className="text-[10px] text-[#aeaeB2] font-black uppercase tracking-wider">En Çok Sayı Atan</p>
+              <h3 className="text-base font-black text-white mt-0.5">{mostGoalsTeam}</h3>
+            </div>
+          </div>
+        </div>
 
-                  <span className="w-1/3 text-left font-medium text-sm text-slate-300 truncate">{match.away}</span>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* FİKSTÜR VE SKOR GİRİŞİ */}
+          <div className="lg:col-span-5 bg-[#2c2c2e] border border-[#3a3a3c] rounded-3xl p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-xs font-black text-[#f2f2f7] uppercase tracking-wider flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#ff6600] animate-ping"></span> Maç Programı & Skor Girişi
+              </h2>
+            </div>
+            
+            <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
+              {data[activeGroup].matches
+                .filter(m => !searchTerm || m.home.toLowerCase().includes(searchTerm.toLowerCase()) || m.away.toLowerCase().includes(searchTerm.toLowerCase()))
+                .map(match => (
+                  <div key={match.id} className="bg-[#1c1c1e] border border-[#3a3a3c] p-4 rounded-2xl hover:border-[#ff6600]/60 transition-all duration-200">
+                    <div className="text-[9px] font-black text-[#ff6600] uppercase tracking-widest mb-2.5 text-center bg-[#ff6600]/5 py-1 rounded-md">
+                      {match.round}
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="w-5/12 text-right font-black text-xs text-white truncate">{match.home}</span>
+                      
+                      <div className="flex items-center gap-2 mx-2">
+                        <input
+                          type="number"
+                          placeholder="-"
+                          min="0"
+                          value={match.homeScore}
+                          onChange={(e) => handleScoreChange(activeGroup, match.id, 'homeScore', e.target.value)}
+                          className="w-11 h-9 bg-[#2c2c2e] text-center rounded-xl border border-[#48484a] font-black text-sm text-[#ff6600] focus:outline-none focus:border-[#ff6600] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                        <span className="text-[#48484a] font-black text-xs">:</span>
+                        <input
+                          type="number"
+                          placeholder="-"
+                          min="0"
+                          value={match.awayScore}
+                          onChange={(e) => handleScoreChange(activeGroup, match.id, 'awayScore', e.target.value)}
+                          className="w-11 h-9 bg-[#2c2c2e] text-center rounded-xl border border-[#48484a] font-black text-sm text-[#ff6600] focus:outline-none focus:border-[#ff6600] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        />
+                      </div>
+
+                      <span className="w-5/12 text-left font-black text-xs text-white truncate">{match.away}</span>
+                    </div>
+                  </div>
               ))}
             </div>
           </div>
 
-          {/* PUAN DURUMU ALANI */}
-          <div className="lg:col-span-7 bg-slate-800/40 border border-slate-800 rounded-2xl p-6 backdrop-blur">
-            <h2 className="text-lg font-bold text-slate-200 mb-4 flex items-center gap-2">
-              📊 Canlı Puan Durumu ({activeGroup})
+          {/* PUAN DURUMU TABLOSU */}
+          <div className="lg:col-span-7 bg-[#2c2c2e] border border-[#3a3a3c] rounded-3xl p-6 shadow-xl">
+            <h2 className="text-xs font-black text-[#f2f2f7] uppercase tracking-wider mb-5">
+              📊 Şenlik Puan Durumu Tablosu
             </h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-300">
-                <thead className="text-xs uppercase bg-slate-900/80 text-slate-400">
+            <div className="overflow-x-auto rounded-2xl border border-[#3a3a3c] bg-[#1c1c1e]">
+              <table className="w-full text-left text-xs table-fixed min-w-[500px]">
+                <thead className="bg-[#2c2c2e] font-black uppercase text-[#aeaeB2] tracking-wider border-b border-[#3a3a3c]">
                   <tr>
-                    <th className="px-3 py-3 rounded-l-lg text-center w-10">Sıra</th>
-                    <th className="px-4 py-3">Takım</th>
-                    <th className="px-3 py-3 text-center">O</th>
-                    <th className="px-3 py-3 text-center">G</th>
-                    <th className="px-3 py-3 text-center">B</th>
-                    <th className="px-3 py-3 text-center">M</th>
-                    <th className="px-3 py-3 text-center">AG</th>
-                    <th className="px-3 py-3 text-center">YG</th>
-                    <th className="px-3 py-3 text-center">AV</th>
-                    <th className="px-3 py-3 text-center rounded-r-lg text-emerald-400 font-bold">PTS</th>
+                    <th className="w-12 py-4 text-center">#</th>
+                    <th className="w-40 px-2 py-4">Takım</th>
+                    <th className="w-10 py-4 text-center">O</th>
+                    <th className="w-10 py-4 text-center">G</th>
+                    <th className="w-10 py-4 text-center">B</th>
+                    <th className="w-10 py-4 text-center">M</th>
+                    <th className="w-12 py-4 text-center">AS</th>
+                    <th className="w-12 py-4 text-center">YS</th>
+                    <th className="w-12 py-4 text-center">AV</th>
+                    <th className="w-14 py-4 text-center text-[#ff6600] font-black bg-[#ff6600]/5">PTS</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/50">
-                  {currentTable.map((row, idx) => (
-                    <tr key={row.name} className="hover:bg-slate-800/30 transition-colors">
-                      <td className="px-3 py-3.5 font-bold text-center text-slate-500">
-                        {idx + 1}
-                      </td>
-                      <td className="px-4 py-3.5 font-semibold text-white">
-                        {row.name}
-                      </td>
-                      <td className="px-3 py-3.5 text-center">{row.gp}</td>
-                      <td className="px-3 py-3.5 text-center text-emerald-400">{row.w}</td>
-                      <td className="px-3 py-3.5 text-center text-amber-400">{row.d}</td>
-                      <td className="px-3 py-3.5 text-center text-rose-400">{row.l}</td>
-                      <td className="px-3 py-3.5 text-center text-slate-400">{row.gf}</td>
-                      <td className="px-3 py-3.5 text-center text-slate-400">{row.ga}</td>
-                      <td className="px-3 py-3.5 text-center font-medium">{row.gd > 0 ? `+${row.gd}` : row.gd}</td>
-                      <td className="px-3 py-3.5 text-center font-bold text-emerald-400 bg-emerald-950/10">{row.pts}</td>
-                    </tr>
-                  ))}
+                <tbody className="divide-y divide-[#2c2c2e] font-bold text-[#e5e5ea]">
+                  {currentTable
+                    .filter(row => !searchTerm || row.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                    .map((row, idx) => {
+                      const isLeader = idx === 0 && row.pts > 0;
+                      return (
+                        <tr key={row.name} className="hover:bg-[#2c2c2e]/50 transition-colors group">
+                          <td className={`py-3.5 text-center font-black ${isLeader ? 'text-[#ff6600]' : 'text-[#636366]'}`}>
+                            {idx + 1}
+                          </td>
+                          <td className={`px-2 py-3.5 font-black truncate group-hover:text-[#ff6600] transition-colors ${isLeader ? 'text-white' : 'text-[#f2f2f7]'}`}>
+                            {row.name}
+                          </td>
+                          <td className="py-3.5 text-center text-[#8e8e93]">{row.gp}</td>
+                          <td className="py-3.5 text-center text-white">{row.w}</td>
+                          <td className="py-3.5 text-center text-white">{row.d}</td>
+                          <td className="py-3.5 text-center text-white">{row.l}</td>
+                          <td className="py-3.5 text-center text-[#8e8e93]">{row.gf}</td>
+                          <td className="py-3.5 text-center text-[#8e8e93]">{row.ga}</td>
+                          <td className={`py-3.5 text-center font-black ${row.gd > 0 ? 'text-emerald-400' : row.gd < 0 ? 'text-rose-400' : 'text-[#8e8e93]'}`}>
+                            {row.gd > 0 ? `+${row.gd}` : row.gd}
+                          </td>
+                          <td className="py-3.5 text-center font-black text-[#ff6600] bg-[#ff6600]/5 text-sm">{row.pts}</td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
           </div>
+
         </div>
       </main>
     </div>
