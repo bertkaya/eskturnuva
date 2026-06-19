@@ -8,13 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.1",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest"
   },
   "devDependencies": {
-    "tailwindcss": "latest",
+    "autoprefixer": "latest",
     "postcss": "latest",
-    "autoprefixer": "latest"
+    "tailwindcss": "latest"
   }
 }
