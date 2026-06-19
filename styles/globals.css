@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@theme {
+  --color-court-950: #081416;
+  --color-court-900: #0d2024;
+  --color-court-850: #11272c;
+  --color-court-800: #163338;
+  --color-court-700: #1e434a;
+  --color-court-600: #2a565e;
+  --color-court-500: #3f747c;
+  --color-court-400: #6b9aa1;
+  --color-court-300: #9fc1c5;
+
+  --color-flame-400: #ff8a52;
+  --color-flame-500: #ff6a2b;
+  --color-flame-600: #ef5a1c;
+
+  --color-ball-400: #ffcf5c;
+  --color-ball-500: #ffc233;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --animate-fadeUp: fadeUp 0.35s ease-out both;
+  --animate-pulseDot: pulseDot 1.6s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+html {
+  background-color: #081416;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scoreboard-style number inputs: hide native spinners */
+.score-input::-webkit-outer-spin-button,
+.score-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.score-input {
+  -moz-appearance: textfield;
+}
+
+/* Thin court-line scrollbar */
+.court-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 5px;
+}
+.court-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.court-scrollbar::-webkit-scrollbar-thumb {
+  background: #2a565e;
+  border-radius: 20px;
+}
+.court-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ff6a2b;
+}
+
+/* Net divider: dashed chalk line with diamond mesh feel */
+.net-divider {
+  background-image: repeating-linear-gradient(
+    to right,
+    rgba(238, 247, 244, 0.18) 0px,
+    rgba(238, 247, 244, 0.18) 6px,
+    transparent 6px,
+    transparent 14px
+  );
+  height: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
